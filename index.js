@@ -81,6 +81,7 @@ const fund = async () => {
         contractAbi,
         signer
       );
+      // const gasLimit = await signer.estimateGas();
       const transactionResponse = await contract.fund({
         value: ethers.utils.parseEther(ethAmount),
       });

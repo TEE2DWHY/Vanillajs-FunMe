@@ -43,6 +43,7 @@ const balance = async () => {
       currentBalance.innerHTML = `User Balance is: ${formattedBalance}`;
     } catch (err) {
       console.log(err);
+      ``;
     }
   }
 };
@@ -69,10 +70,9 @@ const fund = async () => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const address = await signer.getAddress();
-      console.log(address);
       const userBalance = await signer.getBalance();
-      if (userBalance < ethAmount) {
+      const formattedBalance = ethers.utils.formatEther(userBalance);
+      if (Number(ethAmount) > Number(formattedBalance)) {
         alert("Insufficient fund. Please fund wallet");
         return;
       }
@@ -114,9 +114,7 @@ const withdraw = async () => {
   if (typeof window.ethereum !== "undefined") {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    console.log(signer);
     const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-    console.log(contract);
     try {
       const transactionResponse = await contract.withdraw();
       await isTransactionMined(transactionResponse, provider);

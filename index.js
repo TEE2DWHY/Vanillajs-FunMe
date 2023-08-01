@@ -65,6 +65,8 @@ const balance = async () => {
       alert("user is not connected");
       console.log(err);
     }
+  } else {
+    alert("User is not connected");
   }
 };
 

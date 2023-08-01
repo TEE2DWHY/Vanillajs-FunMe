@@ -79,10 +79,11 @@ const contractBalance = async () => {
       const formattedBalance = ethers.utils.formatEther(balance);
       alert(`Contract balance is: $${formattedBalance}`);
     } catch (err) {
+      alert("Provider not found. Please Connect to Metamask wallet");
       console.error(err);
     }
   } else {
-    alert("Provider not found. Please Connect to Metamask wallet");
+    alert("User is not connected");
   }
 };
 

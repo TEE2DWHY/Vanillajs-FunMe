@@ -72,14 +72,17 @@ const balance = async () => {
 
 // get contractBalance
 const contractBalance = async () => {
-  try {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const balance = await provider.getBalance(contractAddress);
-    const formattedBalance = ethers.utils.formatEther(balance);
-    alert(`Contract balance is: $${formattedBalance}`);
-  } catch (err) {
-    alert("An error occurred");
-    console.error(err);
+  if (typeof window.ethereum !== undefined) {
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const balance = await provider.getBalance(contractAddress);
+      const formattedBalance = ethers.utils.formatEther(balance);
+      alert(`Contract balance is: $${formattedBalance}`);
+    } catch (err) {
+      console.error(err);
+    }
+  } else {
+    alert("Provider not found. Please Connect to Metamask wallet");
   }
 };
 

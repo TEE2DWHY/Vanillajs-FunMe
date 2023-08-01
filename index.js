@@ -72,17 +72,13 @@ const balance = async () => {
 
 // get contractBalance
 const contractBalance = async () => {
-  if (typeof window.ethereum !== "undefined") {
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const balance = await provider.getBalance(contractAddress);
-      const formattedBalance = ethers.utils.formatEther(balance);
-      alert(`Contract balance is: $${formattedBalance}`);
-    } catch (err) {
-      console.error(err);
-    }
-  } else {
-    alert("User is not connected");
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const balance = await provider.getBalance(contractAddress);
+    const formattedBalance = ethers.utils.formatEther(balance);
+    alert(`Contract balance is: $${formattedBalance}`);
+  } catch (err) {
+    console.error(err);
   }
 };
 

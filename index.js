@@ -14,20 +14,41 @@ const transfer = document.getElementById("withdraw");
 const connectToMetaMask = async () => {
   if (typeof window.ethereum !== "undefined") {
     try {
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            chainId: "0x5",
+            chainName: "Goerli Testnet",
+            nativeCurrency: {
+              name: "Ether",
+              symbol: "ETH",
+              decimals: 18,
+            },
+            rpcUrls: [
+              "https://eth-goerli.g.alchemy.com/v2/lLPJAEdhtfrC_HFru6cNMYGKrPz9MLiw",
+            ],
+            blockExplorerUrls: ["https://goerli.etherscan.io/"],
+          },
+        ],
+      });
+
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
+
       const account = accounts[0];
       if (account) {
         document.getElementById(
           "connectBtn"
-        ).innerHTML = `Current User Address: ${account}`;
+        ).innerHTML = `Connected User Address: ${account}`;
       }
+      document.getElementById("form").style.display = "block";
     } catch (err) {
       console.log(err);
     }
   } else {
-    console.log("Please install MetaMask");
+    alert("Please install MetaMask or open in dApp browser.");
   }
 };
 
@@ -40,7 +61,7 @@ const balance = async () => {
       const signer = provider.getSigner();
       const userBalance = await signer.getBalance();
       const formattedBalance = ethers.utils.formatEther(userBalance);
-      currentBalance.innerHTML = `User Balance is: ${formattedBalance}`;
+      alert(`Current user balance is : $${formattedBalance}ETH`);
     } catch (err) {
       console.log(err);
       ``;
@@ -55,9 +76,9 @@ const contractBalance = async () => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const balance = await provider.getBalance(contractAddress);
       const formattedBalance = ethers.utils.formatEther(balance);
-      console.log(formattedBalance);
+      alert(`Contract balance is: $${formattedBalance}`);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 };
@@ -65,6 +86,7 @@ const contractBalance = async () => {
 // fund function
 const fund = async () => {
   const ethAmount = document.getElementById("amount").value;
+
   // Contract eth funding amount can not be less than $50
   if (typeof window.ethereum !== "undefined") {
     try {
@@ -82,6 +104,10 @@ const fund = async () => {
         signer
       );
       // const gasLimit = await signer.estimateGas();
+      if (ethAmount === "") {
+        alert("input field cannot be empty");
+        return;
+      }
       const transactionResponse = await contract.fund({
         value: ethers.utils.parseEther(ethAmount),
       });
@@ -89,6 +115,7 @@ const fund = async () => {
       await isTransactionMined(transactionResponse, provider);
       console.log("done!");
     } catch (err) {
+      alert("Error: Minimum funding amount is $50.");
       console.log(err);
     }
   }
@@ -120,6 +147,7 @@ const withdraw = async () => {
       await isTransactionMined(transactionResponse, provider);
       console.log("withdrawal is successful");
     } catch (err) {
+      alert("Error: Not Contract Owner!");
       console.log(err);
     }
   }

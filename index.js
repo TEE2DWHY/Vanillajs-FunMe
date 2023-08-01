@@ -54,7 +54,6 @@ const connectToMetaMask = async () => {
 
 // get user balance
 const balance = async () => {
-  const currentBalance = document.getElementById("userBalance");
   if (typeof window.ethereum !== "undefined") {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -63,8 +62,8 @@ const balance = async () => {
       const formattedBalance = ethers.utils.formatEther(userBalance);
       alert(`Current user balance is : $${formattedBalance}ETH`);
     } catch (err) {
+      alert("user is not connected");
       console.log(err);
-      ``;
     }
   }
 };
@@ -80,6 +79,8 @@ const contractBalance = async () => {
     } catch (err) {
       console.error(err);
     }
+  } else {
+    alert("User is not connected");
   }
 };
 
@@ -150,6 +151,8 @@ const withdraw = async () => {
       alert("Error: Not Contract Owner!");
       console.log(err);
     }
+  } else {
+    alert("User is not connected");
   }
 };
 

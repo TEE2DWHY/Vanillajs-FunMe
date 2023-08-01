@@ -78,6 +78,7 @@ const contractBalance = async () => {
     const formattedBalance = ethers.utils.formatEther(balance);
     alert(`Contract balance is: $${formattedBalance}`);
   } catch (err) {
+    alert("An error occurred");
     console.error(err);
   }
 };
